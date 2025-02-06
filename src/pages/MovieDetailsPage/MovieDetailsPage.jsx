@@ -1,35 +1,46 @@
-import { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useParams, Link, Outlet } from "react-router-dom";
+import { fetchMovieDetails } from "../../api";
 import BackButton from "../../components/BackButton/BackButton";
-import MovieCast from "../../components/MovieCast/MovieCast";
-import MovieReviews from "../../components/MovieReviews/MovieReviews";
 
-const MovieDetailsPage = ({ onFetchDetails, movieDetails, onFetchCast, movieCast, onFetchReviews, movieReviews }) => {
-    const { movieID } = useParams();
+function MovieDetailsPage() {
+    const { movieId } = useParams();
+    const [movie, setMovie] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-        onFetchDetails(movieID);
-        onFetchCast(movieID);
-        onFetchReviews(movieID);
-    }, [movieID, onFetchDetails, onFetchCast, onFetchReviews]);
+        setIsLoading(true);
+        fetchMovieDetails(movieId).then(setMovie).then(() => setIsLoading(false));
 
-    if (!movieDetails) {
-        return <p>Loading...</p>;
+    }, [movieId]);
+    if (isLoading) {
+        return <p>Loading...</p>
     }
-
-    return (
+    return movie ? (
         <div>
             <BackButton />
-            <h1>{movieDetails.title}</h1>
-            <p>{movieDetails.overview}</p>
+            <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} />
+            <h1>{movie.title}</h1>
+            <p>Score:{Math.round(movie.vote_average * 10)}%</p>
+            <p>{movie.overview}</p>
+            <ul>
+                {
+                    movie.genres.map(genre => (
+                        <li key={genre.id}>{genre.name}</li>
+                    ))
+                }
+            </ul>
 
-            <h2>Actors</h2>
-            <MovieCast movieId={movieID} cast={movieCast} />
 
-            <h2>Reviews</h2>
-            <MovieReviews movieId={movieID} reviews={movieReviews} />
+            <div>
+                <Link to={`cast`} className="button">Check actors</Link>
+                <Link to={`reviews`} className="button">Check rewiews</Link>
+                <Outlet />
+            </div>
         </div>
-    );
-};
+    ) : (
+            <p>Not found</p>
+        );
+}
 
 export default MovieDetailsPage;

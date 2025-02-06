@@ -1,29 +1,38 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import { useParams } from "react-router-dom";
+import { fetchMovieCast } from "../../api";
 
-const MovieCast = ({ movieId }) => {
+function MovieCast() {
+    const { movieId } = useParams();
     const [cast, setCast] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-        axios
-            .get(`https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxYWEyMmE5NDRjMmMwOWY1MmUwZGY1MDhiYWJiMjI2MSIsIm5iZiI6MTczODUyNDAyNS44ODYwMDAyLCJzdWIiOiI2NzlmYzU3OTgwMDgyOTg2YzhjYjdiZGMiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.a9v3JTSMtOwhWssbLbutI3e6MGdHnonLVMIe7vb_zaA`)
-            .then((response) => setCast(response.data.cast))
-            .catch((error) => console.error("Error:", error));
+        setIsLoading(true);
+        fetchMovieCast(movieId).then(setCast).then(() => { setIsLoading(false) });
     }, [movieId]);
-
+    if (isLoading) {
+        return <p>Loading...</p>;
+    }
     return (
+
         <div>
-            <h2>Cast</h2>
-            <ul>
-                {cast.map((actor) => (
-                    <li key={actor.id}>
-                        <p>{actor.name}</p>
-                        <p>{actor.character}</p>
-                    </li>
-                ))}
-            </ul>
+            <h2>Actors</h2>
+            {cast.length > 0 ? (
+                <ul>
+                    {cast.map(actor => (
+                        <li key={actor.id}>
+                            <img src={`https://image.tmdb.org/t/p/w500${actor.profile_path}`} />
+                            <h3>{actor.name}</h3>
+                            <p>Caracter: {actor.character}</p>
+                        </li>
+                    ))}
+                </ul>
+            ) : (
+                    <p>Not Actors</p>
+                )}
         </div>
     );
-};
+}
 
 export default MovieCast;
