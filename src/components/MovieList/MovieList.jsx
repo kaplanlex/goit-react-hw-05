@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-
+import styles from "./MovieList.module.css";
 
 function MovieList({ movies, isLoading }) {
     const location = useLocation();
@@ -10,10 +10,10 @@ function MovieList({ movies, isLoading }) {
         <>
             {
 
-                movies.length > 0 ? (<ul >
+                movies.length > 0 ? (<ul className={styles.listMovies}>
                     {movies.map(({ id, title }) => (
                         <li key={id}>
-                            <Link state={{
+                            <Link className={styles.link} state={{
                                 prevLocation: location.pathname + location.search,
                             }} to={
                                 `/movies/${id}`

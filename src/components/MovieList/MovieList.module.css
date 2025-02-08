@@ -1,0 +1,14 @@
+.link{
+background-color:rgb(252, 252, 252);
+color:black;
+}
+
+.link:hover{
+    color:rgb(71, 71, 71)
+}
+
+.listMovies{
+    display: flex;
+    flex-direction: column;
+    gap:3.5px;
+}

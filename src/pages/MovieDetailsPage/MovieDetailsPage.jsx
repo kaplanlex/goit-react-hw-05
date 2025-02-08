@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, Link, Outlet } from "react-router-dom";
 import { fetchMovieDetails } from "../../api";
 import BackButton from "../../components/BackButton/BackButton";
+import styles from "./MovieDetailsPage.module.css";
 
 function MovieDetailsPage() {
     const { movieId } = useParams();
@@ -19,24 +20,27 @@ function MovieDetailsPage() {
     return movie ? (
         <div>
             <BackButton />
-            <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} />
-            <h1>{movie.title}</h1>
-            <p>Score:{Math.round(movie.vote_average * 10)}%</p>
-            <p>{movie.overview}</p>
-            <ul>
-                {
-                    movie.genres.map(genre => (
-                        <li key={genre.id}>{genre.name}</li>
-                    ))
-                }
-            </ul>
-
-
-            <div>
-                <Link to={`cast`} className="button">Check actors</Link>
-                <Link to={`reviews`} className="button">Check rewiews</Link>
-                <Outlet />
+            <div className={styles.divMovies}>
+                <img className={styles.imgMovie} src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} />
+                <h1>{movie.title}</h1>
+                <p >Score:{Math.round(movie.vote_average * 10)}%</p>
+                <p className={styles.descriptionMovie}>{movie.overview}</p>
+                <ul className={styles.genresList}>
+                    {
+                        movie.genres.map(genre => (
+                            <li key={genre.id}>{genre.name}</li>
+                        ))
+                    }
+                </ul>
             </div>
+
+
+            <div className={styles.divLink}>
+                <Link className={styles.link} to={`cast`} className="button">Check actors</Link>
+                <Link className={styles.link} to={`reviews`} className="button">Check rewiews</Link>
+
+            </div>
+            <Outlet />
         </div>
     ) : (
             <p>Not found</p>

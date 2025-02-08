@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { searchMovies } from "../../api";
 import MovieList from "../../components/MovieList/MovieList";
 import { useSearchParams } from 'react-router-dom';
+import styles from "./MoviesPage.module.css";
 
 
 function MoviesPage() {
@@ -26,7 +27,7 @@ function MoviesPage() {
     };
     useEffect(() => {
         setIsLoading(true);
-        searchMovies(query).then(setMovies).then(()=>{ setIsLoading(false)});
+        searchMovies(query).then(setMovies).then(() => { setIsLoading(false) });
     }, [])
 
     const handleSearch = (e) => {
@@ -45,7 +46,7 @@ function MoviesPage() {
                 <input value={query} onChange={(e) => setQuery(e.target.value)} />
                 <button type="submit">Search</button>
             </form>
-            <MovieList movies={movies} isLoading={isLoading}/>
+            <MovieList movies={movies} isLoading={isLoading} />
         </>
     );
 }
