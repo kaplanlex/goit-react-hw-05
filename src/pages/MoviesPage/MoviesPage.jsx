@@ -1,44 +1,44 @@
 import { useState, useEffect } from "react";
 import { searchMovies } from "../../api";
 import MovieList from "../../components/MovieList/MovieList";
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from "react-router-dom";
 import styles from "./MoviesPage.module.css";
 
-
 function MoviesPage() {
-
     const [searchParams, setSearchParams] = useSearchParams();
     const [query, setQuery] = useState(searchParams.get("q") || "");
     const [movies, setMovies] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
-
-
-
-    const updateSearchParams = (key, value) => {
-
-        const updatedParams = new URLSearchParams(searchParams);
-
-
-        updatedParams.set(key, value);
-
-
-        setSearchParams(updatedParams);
-    };
     useEffect(() => {
+        if (!query) return;
+
+        let isCancelled = false;
         setIsLoading(true);
-        searchMovies(query).then(setMovies).then(() => { setIsLoading(false) });
-    }, [])
+
+        searchMovies(query)
+            .then((data) => {
+                if (!isCancelled) setMovies(data);
+            })
+            .finally(() => {
+                if (!isCancelled) setIsLoading(false);
+            });
+
+        return () => {
+            isCancelled = true;
+        };
+    }, [query]);
 
     const handleSearch = (e) => {
         e.preventDefault();
-        setIsLoading(true);
-        searchMovies(query).then(setMovies).then(() => { setIsLoading(false) });
-
         updateSearchParams("q", query);
     };
 
-
+    const updateSearchParams = (key, value) => {
+        const updatedParams = new URLSearchParams(searchParams);
+        updatedParams.set(key, value);
+        setSearchParams(updatedParams);
+    };
 
     return (
         <>
