@@ -1,13 +1,22 @@
 import { useNavigate, useLocation } from "react-router-dom";
+import { useRef } from "react";
 import styles from "./BackButton.module.css";
 
 function BackButton() {
     const location = useLocation();
     const navigate = useNavigate();
+
+
+    const backLink = useRef(location.state ?.from ?? "/movies");
+
+    const handleGoBack = () => {
+        navigate(backLink.current);
+    };
+
     return (
-        <button className={styles.backButton} onClick={() => navigate(location.state ?.prevLocation || "/")}>
+        <button className={styles.backButton} onClick={handleGoBack}>
             Go Back
-    </button>
+        </button>
     );
 }
 

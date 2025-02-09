@@ -8,23 +8,25 @@ function MovieList({ movies, isLoading }) {
     }
     return (
         <>
-            {
-
-                movies.length > 0 ? (<ul className={styles.listMovies}>
+            {movies.length > 0 ? (
+                <ul className={styles.listMovies}>
                     {movies.map(({ id, title }) => (
                         <li key={id}>
-                            <Link className={styles.link} state={{
-                                prevLocation: location.pathname + location.search,
-                            }} to={
-                                `/movies/${id}`
-                            } >{title}</Link>
+                            <Link
+                                className={styles.link}
+                                to={`/movies/${id}`}
+                                state={{ from: location.pathname }}
+                            >
+                                {title}
+                            </Link>
                         </li>
                     ))}
-                </ul>) : <p>No movies</p>
-            }
+                </ul>
+            ) : (
+                    <p>No movies</p>
+                )}
         </>
     );
-
 }
 
 export default MovieList;
