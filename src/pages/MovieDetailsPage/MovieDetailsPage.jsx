@@ -37,7 +37,7 @@ function MovieDetailsPage() {
 
             <div className={styles.divLink}>
                 <Link className={styles.link} to={`cast`} className="button">Check actors</Link>
-                <Link className={styles.link} to={`reviews`} className="button">Check rewiews</Link>
+                <Link className={styles.link} to={`reviews`} className="button">Check reviews</Link>
 
             </div>
             <Outlet />
