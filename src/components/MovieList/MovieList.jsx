@@ -15,7 +15,7 @@ function MovieList({ movies, isLoading }) {
                             <Link
                                 className={styles.link}
                                 to={`/movies/${id}`}
-                                state={{ from: location.pathname }}
+                                state={{ from: location }}
                             >
                                 {title}
                             </Link>
