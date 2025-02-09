@@ -11,6 +11,7 @@ function MoviesPage() {
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
+        updateSearchParams("q", query);
         if (!query) return;
 
         let isCancelled = false;
@@ -19,6 +20,7 @@ function MoviesPage() {
         searchMovies(query)
             .then((data) => {
                 if (!isCancelled) setMovies(data);
+
             })
             .finally(() => {
                 if (!isCancelled) setIsLoading(false);
@@ -31,7 +33,6 @@ function MoviesPage() {
 
     const handleSearch = (e) => {
         e.preventDefault();
-        updateSearchParams("q", query);
     };
 
     const updateSearchParams = (key, value) => {
